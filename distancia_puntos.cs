@@ -1,59 +1,37 @@
-class Guerrero
+ class Punto
 {
-    public int Vida { get; set; }
-    public int NivelAtaque { get; set; }
-    public string Nombre { get; set; }
+    public decimal X { get; set; }
+    public decimal Y { get; set; }
+    public decimal Z { get; set; }
 
-    public Guerrero(int vida, int nivelAtaque, string nombre)
+    public Punto(decimal x, decimal y)
     {
-        Vida = vida;
-        NivelAtaque = nivelAtaque;
-        Nombre = nombre;
+        X = x;
+        Y = y;
+        Z = 0; 
     }
 
-    public int Ataque()
+    public Punto(decimal x, decimal y, decimal z)
     {
-        return NivelAtaque;
+        X = x;
+        Y = y;
+        Z = z;
     }
 
-    public void RecibeAtaque(int ataque)
+    public double MedirDistancia(Punto destino)
     {
-        Vida -= ataque;
-    }
-}
+        double distancia;
 
-class Enfrentamiento
-{
-    public void Iniciar(Guerrero guerrero1, Guerrero guerrero2)
-    {
-        Console.WriteLine("¡Comienza el enfrentamiento!");
-        Console.WriteLine($"{guerrero1.Nombre} (Vida: {guerrero1.Vida}) vs {guerrero2.Nombre} (Vida: {guerrero2.Vida})\n");
-
-        while (guerrero1.Vida > 0 && guerrero2.Vida > 0)
+        if (Z == 0 && destino.Z == 0)
         {
-            int ataqueGuerrero1 = guerrero1.Ataque();
-            guerrero2.RecibeAtaque(ataqueGuerrero1);
-            Console.WriteLine($"{guerrero1.Nombre} ataca a {guerrero2.Nombre} causando {ataqueGuerrero1} de daño.");
-            Console.WriteLine($"{guerrero2.Nombre} tiene {guerrero2.Vida} de vida restante.\n");
-
-            if (guerrero2.Vida <= 0)
-            {
-                Console.WriteLine($"{guerrero1.Nombre} ha derrotado a {guerrero2.Nombre}.");
-                break;
-            }
-
-            int ataqueGuerrero2 = guerrero2.Ataque();
-            guerrero1.RecibeAtaque(ataqueGuerrero2);
-            Console.WriteLine($"{guerrero2.Nombre} ataca a {guerrero1.Nombre} causando {ataqueGuerrero2} de daño.");
-            Console.WriteLine($"{guerrero1.Nombre} tiene {guerrero1.Vida} de vida restante.\n");
-
-        
-            if (guerrero1.Vida <= 0)
-            {
-                Console.WriteLine($"{guerrero2.Nombre} ha derrotado a {guerrero1.Nombre}.");
-                break;
-            }
+            distancia = Math.Sqrt(Math.Pow((double)(destino.X - X), 2) + Math.Pow((double)(destino.Y - Y), 2));
         }
+        else 
+        {
+            distancia = Math.Sqrt(Math.Pow((double)(destino.X - X), 2) + Math.Pow((double)(destino.Y - Y), 2) + Math.Pow((double)(destino.Z - Z), 2));
+        }
+
+        return distancia;
     }
 }
 
@@ -61,10 +39,18 @@ class Program
 {
     static void Main()
     {
-        Guerrero guerrero1 = new Guerrero(100, 15, "Guerrero 1");
-        Guerrero guerrero2 = new Guerrero(90, 18, "Guerrero 2");
+        Punto puntoOrigen2D = new Punto(0, 0);
+        Punto puntoDestino2D = new Punto(3, 4);
 
-        Enfrentamiento enfrentamiento = new Enfrentamiento();
-        enfrentamiento.Iniciar(guerrero1, guerrero2);
+        double distancia2D = puntoOrigen2D.MedirDistancia(puntoDestino2D);
+
+        Console.WriteLine("Distancia en 2D: " + distancia2D);
+
+        Punto puntoOrigen3D = new Punto(1, 2, 3);
+        Punto puntoDestino3D = new Punto(4, 5, 6);
+
+        double distancia3D = puntoOrigen3D.MedirDistancia(puntoDestino3D);
+
+        Console.WriteLine("Distancia en 3D: " + distancia3D);
     }
 }
